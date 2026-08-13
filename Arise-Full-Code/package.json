@@ -1,0 +1,90 @@
+{
+  "name": "arise",
+  "productName": "Arise",
+  "version": "0.1.0",
+  "description": "Level Up Your Real Life — a personal RPG life-management system.",
+  "main": "electron/main.cjs",
+  "author": "Ayush Kushwaha",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently -k \"npm:dev:renderer\" \"npm:dev:electron\"",
+    "dev:renderer": "vite",
+    "dev:electron": "wait-on tcp:5173 && cross-env NODE_ENV=development electron .",
+    "build": "tsc -b && vite build",
+    "start": "electron .",
+    "icon": "python3 scripts/generate_icon.py",
+    "dist": "npm run build && electron-builder --win nsis portable",
+    "dist:msi": "npm run build && electron-builder --win msi",
+    "dist:all": "npm run build && electron-builder --win nsis portable msi",
+    "typecheck": "tsc -b --noEmit"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^31.2.1",
+    "electron-builder": "^24.13.3",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.ayush.arise",
+    "productName": "Arise",
+    "artifactName": "${productName}-Setup-${version}.${ext}",
+    "icon": "public/icon.ico",
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/sql.js/dist/sql-wasm.wasm"
+    ],
+    "win": {
+      "signAndEditExecutable": false,
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] },
+        { "target": "msi", "arch": ["x64"] }
+      ],
+      "icon": "public/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Arise",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    },
+    "msi": {
+      "artifactName": "${productName}-${version}.${ext}",
+      "oneClick": false,
+      "createDesktopShortcut": true
+    },
+    "directories": {
+      "output": "release"
+    },
+    "publish": null
+  },
+  "dependencies": {
+    "framer-motion": "^11.3.8",
+    "lucide-react": "^0.408.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.12.7",
+    "sql.js": "^1.11.0",
+    "zustand": "^4.5.4"
+  }
+}

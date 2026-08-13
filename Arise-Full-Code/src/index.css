@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* --- Dark theme (default): near-black navy surfaces, teal/cyan accent --- */
+  --color-void: 7 10 12;
+  --color-card: 11 15 18;
+  --color-cardhi: 16 21 25;
+  --color-border: 30 38 42;
+  --color-ink: 226 236 236;
+  --color-ink-muted: 108 128 130;
+
+  /* System-adaptive accent (used when the "System" preset is selected) */
+  --color-accent: 45 212 191; /* teal-400 */
+  --color-accent-2: 94 234 212; /* teal-300 */
+
+  --color-grid: 255 255 255;
+  --grid-opacity: 0.025;
+
+  --font-scale: 1;
+}
+
+:root[data-theme="light"] {
+  --color-void: 248 249 251;
+  --color-card: 255 255 255;
+  --color-cardhi: 243 244 248;
+  --color-border: 226 228 234;
+  --color-ink: 22 24 30;
+  --color-ink-muted: 118 122 135;
+
+  /* System-adaptive accent flips to a soft lavender in light mode */
+  --color-accent: 124 110 246;
+  --color-accent-2: 167 148 250;
+
+  --color-grid: 20 20 30;
+  --grid-opacity: 0.035;
+}
+
+/* Explicit accent presets always win over the theme-adaptive default,
+   in both themes — placed after the theme block so they take precedence
+   in the cascade for any of these attribute combinations. */
+:root[data-accent="blue"] {
+  --color-accent: 59 130 246;
+  --color-accent-2: 34 211 238;
+}
+:root[data-accent="green"] {
+  --color-accent: 52 211 153;
+  --color-accent-2: 34 211 238;
+}
+:root[data-accent="rose"] {
+  --color-accent: 244 63 94;
+  --color-accent-2: 251 146 60;
+}
+:root[data-accent="amber"] {
+  --color-accent: 245 158 11;
+  --color-accent-2: 236 72 153;
+}
+
+html {
+  font-size: calc(16px * var(--font-scale));
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  background-color: rgb(var(--color-void));
+  color: rgb(var(--color-ink));
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+}
+
+/* Fine telemetry grid + vignette — part of the interface itself, not a
+   decorative wallpaper image. Pure CSS gradients, so it repaints
+   instantly on theme switch with zero asset weight. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -20;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(var(--color-grid) / var(--grid-opacity)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--color-grid) / var(--grid-opacity)) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -19;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 15%, rgb(var(--color-accent) / 0.08), transparent 45%),
+    radial-gradient(circle at 80% 85%, rgb(var(--color-accent-2) / 0.06), transparent 50%);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-border));
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--color-accent) / 0.5);
+}
+
+@layer components {
+  /* Boxed panel — used sparingly now (modals, settings forms), not as
+     the default dashboard building block. */
+  .panel {
+    @apply relative rounded-2xl border border-border bg-card/80 backdrop-blur-md transition-all duration-300;
+  }
+  .panel:hover {
+    @apply -translate-y-0.5 border-accent/25;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+  .panel-glow {
+    @apply panel shadow-glow-accent;
+  }
+
+  /* Borderless "floating region" — the primary dashboard building block.
+     Hierarchy comes from a thin top divider + label, not a box. */
+  .region {
+    @apply relative;
+  }
+  .region-divider {
+    @apply mb-3 border-t border-border pt-3;
+  }
+
+  .eyebrow {
+    @apply text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted;
+  }
+
+  .stat-chip {
+    @apply flex items-center gap-2 rounded-lg border border-border bg-cardhi/60 px-3 py-1.5 text-sm transition-transform duration-150;
+  }
+
+  .font-display {
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    letter-spacing: 0.01em;
+  }
+  .font-mono-num {
+    font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  }
+
+  .btn-accent {
+    @apply bg-accent-gradient text-white transition-all duration-150 hover:opacity-90 active:scale-[0.97];
+  }
+
+  .glow-text {
+    text-shadow: 0 0 16px rgb(var(--color-accent) / 0.5);
+  }
+
+  button {
+    @apply transition-transform duration-150;
+  }
+}
