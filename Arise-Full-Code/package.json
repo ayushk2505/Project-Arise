@@ -41,9 +41,9 @@
     "files": [
       "dist/**/*",
       "electron/**/*",
-      "package.json",
-      "node_modules/**/*"
+      "package.json"
     ],
+    "compression": "maximum",
     "asarUnpack": [
       "node_modules/sql.js/dist/sql-wasm.wasm"
     ],
