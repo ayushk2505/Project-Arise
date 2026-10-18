@@ -59,7 +59,13 @@ async function initDatabase(userDataDir) {
   });
 
   if (!fs.existsSync(userDataDir)) fs.mkdirSync(userDataDir, { recursive: true });
-  dbPath = path.join(userDataDir, "system-exe.sqlite");
+  dbPath = path.join(userDataDir, "arise.sqlite");
+  const legacyDbPath = path.join(userDataDir, "system-exe.sqlite");
+
+  // Keep existing profiles and quest history when moving from the old name.
+  if (!fs.existsSync(dbPath) && fs.existsSync(legacyDbPath)) {
+    fs.copyFileSync(legacyDbPath, dbPath);
+  }
 
   if (fs.existsSync(dbPath)) {
     db = new SQL.Database(fs.readFileSync(dbPath));
@@ -224,7 +230,6 @@ function getFullState() {
     .filter((a) => a.unlocked_at)
     .reduce((sum, a) => sum + (RARITY_POINTS[a.rarity] ?? 0), 0);
   const stats = getStatsSummary(profile, aggregate, achievementCount, achievementPoints);
-  const friends = runQuery("SELECT * FROM friends ORDER BY added_at DESC");
 
   return {
     profile,
@@ -234,7 +239,6 @@ function getFullState() {
     skillTotals,
     heatmap,
     stats,
-    friends,
   };
 }
 
@@ -299,7 +303,6 @@ const EDITABLE_PROFILE_FIELDS = [
   "country",
   "timezone",
   "avatar_path",
-  "cover_path",
   "theme",
   "accent_color",
   "font_size",
@@ -397,21 +400,6 @@ function archiveQuest(questId) {
   return getFullState();
 }
 
-function addFriendByCode(code) {
-  // Honest limitation: there is no backend service to look up another
-  // person's device by friend code. This app is fully offline and
-  // single-user by design. The schema and IPC plumbing are real and
-  // ready to wire up once a sync service exists — this just can't
-  // pretend to find a real person on the other end of `code` today.
-  return {
-    success: false,
-    reason: "no_backend",
-    message:
-      "Friends require a cloud sync service that isn't set up yet. This app currently runs fully offline.",
-    state: getFullState(),
-  };
-}
-
 module.exports = {
   initDatabase,
   getFullState,
@@ -420,7 +408,6 @@ module.exports = {
   createQuest,
   updateQuest,
   archiveQuest,
-  addFriendByCode,
   persist,
   getDbPath: () => dbPath,
 };

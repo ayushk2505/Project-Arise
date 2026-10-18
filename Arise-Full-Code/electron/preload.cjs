@@ -7,8 +7,7 @@ contextBridge.exposeInMainWorld("api", {
   updateQuest: (questId, data) => ipcRenderer.invoke("quest:update", questId, data),
   archiveQuest: (questId) => ipcRenderer.invoke("quest:archive", questId),
   updateProfile: (fields) => ipcRenderer.invoke("profile:update", fields),
-  pickProfileImage: (kind) => ipcRenderer.invoke("profile:pickImage", kind),
-  addFriend: (code) => ipcRenderer.invoke("friend:add", code),
+  pickProfileImage: () => ipcRenderer.invoke("profile:pickImage"),
   getDbPath: () => ipcRenderer.invoke("db:path"),
   getAppVersion: () => ipcRenderer.invoke("app:version"),
 });

@@ -38,12 +38,13 @@ if (!gotLock) {
 
 function createSplashWindow() {
   splashWindow = new BrowserWindow({
-    width: 380,
-    height: 380,
+    width: 460,
+    height: 460,
     frame: false,
     transparent: true,
     resizable: false,
     movable: false,
+    center: true,
     alwaysOnTop: true,
     skipTaskbar: true,
     icon: ICON_PATH,
@@ -140,14 +141,13 @@ function registerIpcHandlers() {
   ipcMain.handle("quest:update", (_event, questId, data) => db.updateQuest(questId, data));
   ipcMain.handle("quest:archive", (_event, questId) => db.archiveQuest(questId));
   ipcMain.handle("profile:update", (_event, fields) => db.updateProfile(fields));
-  ipcMain.handle("friend:add", (_event, code) => db.addFriendByCode(code));
   ipcMain.handle("db:path", () => db.getDbPath());
   ipcMain.handle("app:version", () => app.getVersion());
 
-  ipcMain.handle("profile:pickImage", async (_event, kind) => {
+  ipcMain.handle("profile:pickImage", async () => {
     if (!mainWindow) return null;
     const result = await dialog.showOpenDialog(mainWindow, {
-      title: kind === "cover" ? "Choose a cover banner" : "Choose a profile picture",
+      title: "Choose a profile picture",
       filters: [{ name: "Images", extensions: ["png", "jpg", "jpeg", "webp", "gif"] }],
       properties: ["openFile"],
     });
@@ -158,11 +158,11 @@ function registerIpcHandlers() {
     const imagesDir = path.join(app.getPath("userData"), "images");
     if (!fs.existsSync(imagesDir)) fs.mkdirSync(imagesDir, { recursive: true });
 
-    const destName = `${kind}${ext}`;
+    const destName = `avatar${ext}`;
     const destPath = path.join(imagesDir, destName);
     fs.copyFileSync(sourcePath, destPath);
 
-    const updated = db.updateProfile({ [kind === "cover" ? "cover_path" : "avatar_path"]: destPath });
+    const updated = db.updateProfile({ avatar_path: destPath });
     return updated;
   });
 }
