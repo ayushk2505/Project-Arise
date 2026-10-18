@@ -1,4 +1,4 @@
-# System.exe — Level Up Your Real Life
+# Arise — Level Up Your Real Life
 
 A local, offline-first **native Windows desktop app** that turns your daily
 habits (gym, DSA, study, reading, meditation, etc.) into an anime-RPG
@@ -8,10 +8,10 @@ computer, no internet connection required.
 
 Two ready-to-hand-off deliverables ship alongside this source:
 
-- **`System.exe-Setup-0.1.0.exe`** — a real NSIS installer. Double-click,
+- **`Arise-Setup-0.1.0.exe`** — a real NSIS installer. Double-click,
   Next → Install → Finish, get a Desktop + Start Menu shortcut, launch it
   like any other Windows app.
-- **`System.exe-Portable-0.1.0.exe`** — no install step at all, just run it.
+- **`Arise-Portable-0.1.0.exe`** — no install step at all, just run it.
 
 Neither requires Node.js, npm, a terminal, or a browser on the end user's
 machine. Those are only needed if *you* want to keep developing the app.
@@ -142,9 +142,9 @@ npm run dist:all       # NSIS + portable + MSI in one pass
 
 This produces (in `release/`):
 
-- `System.exe-Setup-<version>.exe` — NSIS installer (per-user, changeable
+- `Arise-Setup-<version>.exe` — NSIS installer (per-user, changeable
   install directory, Desktop + Start Menu shortcuts)
-- `System.exe-Portable-<version>.exe` — single-file, no installation
+- `Arise-Portable-<version>.exe` — single-file, no installation
 
 **Building on Linux/macOS**: electron-builder needs Wine to stamp the exe
 with its icon/version metadata, even for an unsigned build. On Ubuntu:
@@ -212,10 +212,12 @@ etc.). This scaffold is structured so each is additive:
 ## Data & backups
 
 Your database and settings live at (Windows):
-`%APPDATA%\system-exe\system-exe.sqlite`
-`%APPDATA%\system-exe\settings.json`
+`%APPDATA%\Arise\arise.sqlite`
+`%APPDATA%\Arise\settings.json`
 
 Since it's a plain SQLite file, backing it up is just copying that file.
+When upgrading from an earlier build, Arise automatically copies the legacy
+`system-exe.sqlite` database to `arise.sqlite` and continues using the same data.
 CSV/PDF export and import (mentioned in the original spec) aren't wired
 up yet — they'd read from the same `quest_log`/`profile` tables.
 
