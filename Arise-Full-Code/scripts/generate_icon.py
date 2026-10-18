@@ -1,5 +1,5 @@
 """Generates public/icon.png (1024x1024 source) and public/icon.ico
-(multi-size Windows icon) for System.exe, matching the in-app neon theme."""
+(multi-size Windows icon) for Arise, matching the in-app neon theme."""
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import math
