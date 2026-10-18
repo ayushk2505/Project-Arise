@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  /* --- Dark theme (default): near-black navy surfaces, teal/cyan accent --- */
+  /* --- Dark theme (default): near-black surfaces, purple accent --- */
   --color-void: 7 10 12;
   --color-card: 11 15 18;
   --color-cardhi: 16 21 25;
@@ -11,9 +11,9 @@
   --color-ink: 226 236 236;
   --color-ink-muted: 108 128 130;
 
-  /* System-adaptive accent (used when the "System" preset is selected) */
-  --color-accent: 45 212 191; /* teal-400 */
-  --color-accent-2: 94 234 212; /* teal-300 */
+  /* Purple preset */
+  --color-accent: 124 110 246;
+  --color-accent-2: 167 148 250;
 
   --color-grid: 255 255 255;
   --grid-opacity: 0.025;
@@ -29,7 +29,7 @@
   --color-ink: 22 24 30;
   --color-ink-muted: 118 122 135;
 
-  /* System-adaptive accent flips to a soft lavender in light mode */
+  /* Keep the selected purple accent consistent in light mode */
   --color-accent: 124 110 246;
   --color-accent-2: 167 148 250;
 
@@ -45,8 +45,12 @@
   --color-accent-2: 34 211 238;
 }
 :root[data-accent="green"] {
-  --color-accent: 52 211 153;
-  --color-accent-2: 34 211 238;
+  --color-accent: 34 197 94;
+  --color-accent-2: 74 222 128;
+}
+:root[data-accent="mint"] {
+  --color-accent: 67 222 200;
+  --color-accent-2: 143 242 230;
 }
 :root[data-accent="rose"] {
   --color-accent: 244 63 94;

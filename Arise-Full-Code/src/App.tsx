@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot } from "lucide-react";
 import { useAppStore } from "./store/useAppStore";
 import { getLevelInfo } from "./lib/xp";
 import type { Quest, QuestInput } from "./types";
@@ -14,7 +13,7 @@ import AchievementsRow from "./components/AchievementsRow";
 import XPChart from "./components/XPChart";
 import ActivityHeatmap from "./components/ActivityHeatmap";
 import SettingsPage from "./components/SettingsPage";
-import FriendsPage from "./components/FriendsPage";
+import ComingSoonPage from "./components/ComingSoonPage";
 import LevelUpModal from "./components/LevelUpModal";
 import RankUpModal from "./components/RankUpModal";
 import OnboardingFlow from "./components/OnboardingFlow";
@@ -28,7 +27,7 @@ export type View =
   | "skills"
   | "achievements"
   | "stats"
-  | "friends"
+  | "network"
   | "ai"
   | "settings";
 
@@ -48,7 +47,6 @@ export default function App() {
     archiveQuest,
     updateProfile,
     pickProfileImage,
-    addFriend,
     clearLevelUp,
     clearRankUp,
   } = useAppStore();
@@ -110,7 +108,7 @@ export default function App() {
   }
 
   const info = getLevelInfo(state.profile.total_xp);
-  const accent = getAccentPreset(state.profile.accent_color, state.profile.theme);
+  const accent = getAccentPreset(state.profile.accent_color);
 
   const openCreateQuest = () => {
     setEditingQuest(null);
@@ -208,25 +206,18 @@ export default function App() {
               </div>
             )}
 
-            {view === "friends" && (
-              <FriendsPage profile={state.profile} friends={state.friends} onAddFriend={addFriend} />
+            {view === "network" && (
+              <ComingSoonPage
+                title="Network"
+                description="Friend connections, shared progress, and leaderboards are planned for a future update."
+              />
             )}
 
             {view === "ai" && (
-              <div className="mx-auto flex max-w-2xl flex-col items-center justify-center gap-4 p-10 py-24 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-accent/30 bg-accent/10 text-accent">
-                  <Bot size={28} />
-                </div>
-                <h1 className="font-display text-xl font-bold text-ink">AI Assistant</h1>
-                <p className="max-w-md text-sm text-ink-muted">
-                  Local analysis of your quest history — skipped habits, streak trends,
-                  consistency insights — computed entirely from data already on your device. Not
-                  built yet; a natural next IPC handler to add on top of this foundation.
-                </p>
-                <span className="rounded-full border border-border bg-cardhi/60 px-3 py-1 text-xs uppercase tracking-widest text-ink-muted">
-                  Coming Soon
-                </span>
-              </div>
+              <ComingSoonPage
+                title="AI Assistant"
+                description="Personalized quest insights and coaching are planned for a future update."
+              />
             )}
 
             {view === "settings" && (

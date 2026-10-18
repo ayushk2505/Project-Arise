@@ -56,7 +56,6 @@ export interface Profile {
   country: string | null;
   timezone: string | null;
   avatar_path: string | null;
-  cover_path: string | null;
   theme: "dark" | "light";
   accent_color: string;
   font_size: "sm" | "md" | "lg";
@@ -66,7 +65,6 @@ export interface Profile {
   working_hours_end: string;
   reminder_time: string;
   notification_style: "popup" | "sound" | "silent";
-  friend_code: string;
   onboarding_complete: number;
   age: number | null;
 }
@@ -133,20 +131,6 @@ export interface StatsSummary {
   achievementPoints: number;
 }
 
-export interface Friend {
-  id: string;
-  friend_code: string;
-  display_name: string;
-  added_at: string;
-}
-
-export interface FriendAddResult {
-  success: boolean;
-  reason?: string;
-  message?: string;
-  state: AppState;
-}
-
 export interface AppState {
   profile: Profile;
   quests: Quest[];
@@ -155,7 +139,6 @@ export interface AppState {
   skillTotals: SkillTotal[];
   heatmap: HeatmapDay[];
   stats: StatsSummary;
-  friends: Friend[];
 }
 
 export interface ToggleQuestResult {
@@ -171,8 +154,7 @@ export interface ElectronApi {
   updateQuest: (questId: string, data: Partial<QuestInput>) => Promise<AppState>;
   archiveQuest: (questId: string) => Promise<AppState>;
   updateProfile: (fields: ProfileUpdateInput) => Promise<AppState>;
-  pickProfileImage: (kind: "avatar" | "cover") => Promise<AppState | null>;
-  addFriend: (code: string) => Promise<FriendAddResult>;
+  pickProfileImage: () => Promise<AppState | null>;
   getDbPath: () => Promise<string>;
   getAppVersion: () => Promise<string>;
 }

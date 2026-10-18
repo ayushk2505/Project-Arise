@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { AppState, QuestInput, ProfileUpdateInput, FriendAddResult } from "../types";
+import type { AppState, QuestInput, ProfileUpdateInput } from "../types";
 import { getLevelInfo } from "../lib/xp";
 import type { RankDef } from "../data/ranks";
 import type { XPPopupItem } from "../components/XPPopup";
@@ -30,8 +30,7 @@ interface AppStore {
   updateQuest: (questId: string, data: Partial<QuestInput>) => Promise<void>;
   archiveQuest: (questId: string) => Promise<void>;
   updateProfile: (fields: ProfileUpdateInput) => Promise<void>;
-  pickProfileImage: (kind: "avatar" | "cover") => Promise<void>;
-  addFriend: (code: string) => Promise<FriendAddResult>;
+  pickProfileImage: () => Promise<void>;
   clearLevelUp: () => void;
   clearRankUp: () => void;
 }
@@ -123,19 +122,13 @@ export const useAppStore = create<AppStore>((set, get) => ({
     }
   },
 
-  pickProfileImage: async (kind) => {
+  pickProfileImage: async () => {
     try {
-      const state = await window.api.pickProfileImage(kind);
+      const state = await window.api.pickProfileImage();
       if (state) set({ state });
     } catch (err) {
       set({ error: err instanceof Error ? err.message : "Failed to update image" });
     }
-  },
-
-  addFriend: async (code) => {
-    const result = await window.api.addFriend(code);
-    set({ state: result.state });
-    return result;
   },
 
   clearLevelUp: () => set({ pendingLevelUp: null }),
