@@ -4,11 +4,13 @@ import RankBadge from "./RankBadge";
 
 interface UpcomingChallengeCardProps {
   totalXp: number;
+  accentColor: string;
+  accentSecondary: string;
 }
 
-export default function UpcomingChallengeCard({ totalXp }: UpcomingChallengeCardProps) {
+export default function UpcomingChallengeCard({ totalXp, accentColor, accentSecondary }: UpcomingChallengeCardProps) {
   const info = getLevelInfo(totalXp);
-  const { rank, nextRank, rankProgressPct } = info;
+  const { nextRank, rankProgressPct } = info;
 
   if (!nextRank) {
     return (
@@ -25,12 +27,12 @@ export default function UpcomingChallengeCard({ totalXp }: UpcomingChallengeCard
     <div className="region">
       <p className="eyebrow mb-2">Upcoming Challenge</p>
       <div className="flex items-center gap-3">
-        <RankBadge rank={nextRank} size="sm" />
+        <RankBadge rank={{ ...nextRank, primary: accentColor, secondary: accentSecondary, glow: `${accentColor}73` }} size="sm" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-ink">Reach {nextRank.name}</p>
           <p className="text-[10px] uppercase tracking-wide text-ink-muted">{nextRank.title}</p>
         </div>
-        <Swords size={14} className="text-ink-muted" />
+        <Swords size={14} style={{ color: accentColor }} />
       </div>
       <div className="mt-2.5">
         <div className="mb-1 flex justify-between text-[10px] text-ink-muted">
@@ -42,7 +44,7 @@ export default function UpcomingChallengeCard({ totalXp }: UpcomingChallengeCard
             className="h-full rounded-full transition-all duration-700"
             style={{
               width: `${rankProgressPct}%`,
-              background: `linear-gradient(90deg, ${rank.primary}, ${nextRank.primary})`,
+              background: `linear-gradient(90deg, ${accentColor}, ${accentSecondary})`,
             }}
           />
         </div>

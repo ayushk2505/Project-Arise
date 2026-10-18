@@ -48,7 +48,7 @@ export default function Dashboard({
   onDeleteQuest,
   onViewAllQuests,
 }: DashboardProps) {
-  const accent = getAccentPreset(appState.profile.accent_color, appState.profile.theme);
+  const accent = getAccentPreset(appState.profile.accent_color);
   const info = getLevelInfo(appState.profile.total_xp);
   const questsCompletedToday = appState.quests.filter((q) => q.completedToday).length;
   const achievementsUnlocked = appState.achievements.filter((a) => a.unlocked_at).length;
@@ -102,7 +102,7 @@ export default function Dashboard({
             <XPChart data={appState.last7Days} accentColor={accent.secondary} title="Neural Activity" compact />
           </Reveal>
           <Reveal i={6}>
-            <UpcomingChallengeCard totalXp={appState.profile.total_xp} />
+            <UpcomingChallengeCard totalXp={appState.profile.total_xp} accentColor={accent.primary} accentSecondary={accent.secondary} />
           </Reveal>
         </div>
       </div>

@@ -27,8 +27,8 @@ const NAV_ITEMS: NavItem[] = [
   { id: "quests", label: "Missions", icon: ScrollText },
   { id: "skills", label: "Genome", icon: Dna },
   { id: "stats", label: "Evolution", icon: TrendingUp },
-  { id: "ai", label: "Analytics", icon: BarChart3 },
-  { id: "friends", label: "Network", icon: Users },
+  { id: "network", label: "Network", icon: Users },
+  { id: "ai", label: "AI Assistant", icon: BarChart3 },
   { id: "achievements", label: "Archive", icon: Archive },
   { id: "settings", label: "Settings", icon: SettingsIcon },
 ];
@@ -59,7 +59,7 @@ export default function Sidebar({ active, onNavigate, displayName, totalXp, rank
         </svg>
         <div>
           <p className="font-display text-sm font-bold leading-none tracking-wide text-ink">
-            SYSTEM.EXE
+            ARISE
           </p>
           <p className="mt-1 text-[9px] uppercase tracking-[0.15em] text-ink-muted">
             Evolve. Adapt. Ascend.
@@ -115,7 +115,7 @@ export default function Sidebar({ active, onNavigate, displayName, totalXp, rank
         </div>
         <p className="mt-4 flex items-center gap-1.5 text-[9px] uppercase tracking-wide text-ink-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          System Stable &middot; Ver. {appVersion || "1.0.0"}
+          System Stable &middot; First Edition · Ver. {appVersion || "0.1.0"}
         </p>
       </div>
     </aside>

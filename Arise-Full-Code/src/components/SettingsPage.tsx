@@ -9,7 +9,7 @@ interface SettingsPageProps {
   stats: StatsSummary;
   appVersion: string;
   onSave: (fields: ProfileUpdateInput) => void;
-  onPickImage: (kind: "avatar" | "cover") => void;
+  onPickImage: () => void;
 }
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
@@ -46,11 +46,9 @@ export default function SettingsPage({ profile, stats, appVersion, onSave, onPic
     reminder_time: profile.reminder_time,
     notification_style: profile.notification_style,
   });
-  const [dirty, setDirty] = useState(false);
-
   const update = <K extends keyof ProfileUpdateInput>(key: K, value: ProfileUpdateInput[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
-    setDirty(true);
+    void onSave({ [key]: value } as ProfileUpdateInput);
   };
 
   const setAppearance = (key: "theme" | "accent_color" | "font_size", value: string) => {
@@ -62,11 +60,6 @@ export default function SettingsPage({ profile, stats, appVersion, onSave, onPic
     if (key === "font_size") root.style.setProperty("--font-scale", value === "sm" ? "0.9" : value === "lg" ? "1.125" : "1");
     // Appearance is saved immediately, so it remains selected after leaving Settings.
     void onSave({ [key]: value } as ProfileUpdateInput);
-  };
-
-  const handleSave = () => {
-    onSave(form);
-    setDirty(false);
   };
 
   return (
@@ -84,16 +77,10 @@ export default function SettingsPage({ profile, stats, appVersion, onSave, onPic
           )}
           <div className="flex gap-2">
             <button
-              onClick={() => onPickImage("avatar")}
+              onClick={onPickImage}
               className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-ink hover:border-accent/40"
             >
               <Camera size={13} /> Change Photo
-            </button>
-            <button
-              onClick={() => onPickImage("cover")}
-              className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-ink hover:border-accent/40"
-            >
-              <Camera size={13} /> Cover Banner
             </button>
           </div>
         </div>
@@ -159,6 +146,7 @@ export default function SettingsPage({ profile, stats, appVersion, onSave, onPic
                 key={key}
                 onClick={() => setAppearance("accent_color", key)}
                 title={preset.label}
+                aria-label={`${preset.label} accent color`}
                 className={`h-9 w-9 rounded-full border-2 ${form.accent_color === key ? "border-ink" : "border-transparent"}`}
                 style={{ background: `linear-gradient(135deg, ${preset.primary}, ${preset.secondary})` }}
               />
@@ -237,16 +225,9 @@ export default function SettingsPage({ profile, stats, appVersion, onSave, onPic
         </p>
       </div>
 
-      <div className="flex items-center justify-between">
-        <p className="text-xs text-ink-muted">Arise {appVersion && `v${appVersion}`}</p>
-        <button
-          onClick={handleSave}
-          disabled={!dirty}
-          className="btn-accent rounded-lg px-5 py-2.5 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          Save Changes
-        </button>
-      </div>
+      <p className="text-xs text-ink-muted">
+        Arise First Edition {appVersion && `· v${appVersion}`}
+      </p>
     </div>
   );
 }
